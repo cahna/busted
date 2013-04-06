@@ -4,6 +4,7 @@ local cli = require 'cliargs'
 local utils = require 'pl.utils'
 local path = require 'pl.path'
 local tablex = require 'pl.tablex'
+local pretty = require 'pl.pretty'
 local busted = require 'busted'
 
 local defaultoutput = busted.defaultoutput
@@ -42,16 +43,17 @@ if args then
   end
 
   local fpath = args.d
+  local tasks, err = nil, ""
 
-  local tasks = nil
   local bfile = path.normpath(path.join(fpath, ".", ".busted"))
-  local success, err = pcall(function() tasks = loadfile(bfile)() end)
+  if path.isfile(bfile) then
+    tasks, err = pretty.read(utils.readfile(bfile, false))
+  end
+  local success = (tasks ~= nil and type(tasks) == "table") and true or false
 
   if args.run ~= "" then
     if not success then
-      return print(err or "")
-    elseif type(tasks) ~= "table" then
-      return print("Aborting: "..bfile.." file does not return a table.")
+      return print("Aborting: "..bfile.." -- "..err)
     end
 
     local runConfig = tasks[args.run]
@@ -106,13 +108,13 @@ if args then
     defer_print = args["defer-print"],
     sound = args.s,
     cwd = args.d,
-    tags = utils.split(args.t, ","),
+    tags = utils.split(args.tags or args.t, ","),
     output = args.output or defaultoutput,
     success_messages = busted.success_messages or nil,
     failure_messages = busted.failure_messages or nil,
     filelist = nil,
   }
-  
+ 
   -- execute tests
   local status_string, failures = busted(options)
     
