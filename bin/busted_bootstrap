@@ -3,6 +3,7 @@
 local cli = require 'cliargs'
 local utils = require 'pl.utils'
 local path = require 'pl.path'
+local tablex = require 'pl.tablex'
 local busted = require 'busted'
 
 local defaultoutput = busted.defaultoutput
@@ -41,7 +42,6 @@ if args then
   end
 
   local fpath = args.d
-  local root_file = path.normpath(path.join(fpath, args.ROOT))
 
   local tasks = nil
   local bfile = path.normpath(path.join(fpath, ".", ".busted"))
@@ -99,7 +99,7 @@ if args then
   local options = {
     path = fpath,
     lang = args.lang,
-    root_file = root_file,
+    root_file = path.normpath(path.join(fpath, args.ROOT)),
     pattern = args.pattern ~= "" and args.pattern or defaultpattern,
     verbose = args.verbose,
     suppress_pending = args["suppress-pending"],
