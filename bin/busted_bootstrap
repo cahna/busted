@@ -1,3 +1,4 @@
+#!/usr/bin/env lua
 -- Busted command-line runner
 
 local cli = require 'cliargs'
@@ -106,7 +107,7 @@ if args then
     defer_print = args["defer-print"],
     sound = args.s,
     cwd = args.d,
-    tags = utils.split(args.t, ","),
+    tags = utils.split(args.tags or args.t, ","),
     output = args.output or defaultoutput,
     success_messages = busted.success_messages or nil,
     failure_messages = busted.failure_messages or nil,
