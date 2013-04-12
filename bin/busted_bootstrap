@@ -12,6 +12,7 @@ local defaultpattern = busted.defaultpattern
 local defaultlua = busted.defaultlua
 local lpathprefix = busted.lpathprefix
 local cpathprefix = busted.cpathprefix
+local runfile = busted.runfile
 local ansicolors = require "ansicolors"
 
 cli:set_name("busted")
@@ -34,6 +35,7 @@ cli:add_flag("-v, --verbose", "verbose output of errors")
 cli:add_flag("-s, --enable-sound", "executes 'say' command if available")
 cli:add_flag("--suppress-pending", "suppress 'pending' test output")
 cli:add_flag("--defer-print", "defer print to when test suite is complete")
+cli:use_file(true)
 
 local args = cli:parse_args()
 
@@ -45,7 +47,7 @@ if args then
   local fpath = args.d
   local tasks, err = nil, ""
 
-  local bfile = path.normpath(path.join(fpath, ".", ".busted"))
+  local bfile = path.normpath(path.join(fpath, ".", runfile))
   if path.isfile(bfile) then
     tasks, err = pretty.read(utils.readfile(bfile, false))
   end

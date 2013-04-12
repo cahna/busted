@@ -1,3 +1,4 @@
 *.swp
 /luacov.report.out
-.busted
+*.busted
+*.cliargs

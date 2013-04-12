@@ -9,32 +9,13 @@ busted._COPYRIGHT   = "Copyright (c) 2013 Olivine Labs, LLC."
 busted._DESCRIPTION = "A unit testing framework with a focus on being easy to use. http://www.olivinelabs.com/busted"
 busted._VERSION     = "Busted 1.6"
 
--- preconfigured run locations
-busted.confdirs     = './:~/:/etc/' -- order by precedence
-busted.runconf      = '.busted'     -- TODO: Reference this filename throughout
-
--- load env defaults (if exist)
-local conf, err = nil, ''
-local success = false
-for _,fpath in ipairs(utils.split(busted.confdirs, ':')) do
-  local bfile = path.normpath(path.expanduser(path.join(fpath, busted.runconf)))
-  if path.isfile(bfile) then
-    -- a runconf file exists at location bfile
-    conf, err = pretty.read(utils.readfile(bfile, false))
-    success = (conf and not err) and type(conf) == 'table' and (conf._all and type(conf._all) == 'table')
-    if success then -- stop searching; a global conf has been found
-      break 
-    end
-  end
-end
-local g = (success and conf._all) and conf._all or {}
-
 -- set defaults
 busted.defaultoutput = path.is_windows and "plain_terminal" or "utf_terminal"
-busted.defaultpattern = g.pattern or '_spec.lua$'
-busted.defaultlua = g.lua or 'luajit'
-busted.lpathprefix = g.lpath or "./src/?.lua;./src/?/?.lua;./src/?/init.lua"
-busted.cpathprefix = g.cpath or (path.is_windows and "./csrc/?.dll;./csrc/?/?.dll;" or "./csrc/?.so;./csrc/?/?.so;")
+busted.defaultpattern = '_spec.lua$'
+busted.defaultlua = 'luajit'
+busted.lpathprefix = "./src/?.lua;./src/?/?.lua;./src/?/init.lua"
+busted.cpathprefix = path.is_windows and "./csrc/?.dll;./csrc/?/?.dll;" or "./csrc/?.so;./csrc/?/?.so;"
+busted.runfile = '.busted'
 require('busted.languages.en')    -- Load default language pack
 
 local failures = 0
