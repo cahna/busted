@@ -35,7 +35,7 @@ cli:add_flag("-v, --verbose", "verbose output of errors")
 cli:add_flag("-s, --enable-sound", "executes 'say' command if available")
 cli:add_flag("--suppress-pending", "suppress 'pending' test output")
 cli:add_flag("--defer-print", "defer print to when test suite is complete")
-cli:use_file(true)
+cli:use_file()
 
 local args = cli:parse_args()
 
